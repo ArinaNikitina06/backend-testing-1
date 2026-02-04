@@ -6,7 +6,7 @@ describe('PostsService', () => {
     text: 'Mocked post',
   };
 
-  beforeEach(async () => {
+  beforeEach(() => {
     postsService = new PostsService();
 
     postsService.create({ text: 'Some pre-existing post' });
