@@ -6,6 +6,10 @@ describe('PostsService', () => {
     text: 'Mocked post',
   };
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   beforeEach(() => {
     postsService = new PostsService();
 
@@ -13,8 +17,8 @@ describe('PostsService', () => {
   });
 
   it('should add a new post', () => {
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date('2020-01-01T00:00:00.000Z'));
+    const fixedDate = '2020-01-01T00:00:00.000Z';
+    jest.spyOn(Date.prototype, 'toISOString').mockReturnValue(fixedDate);
 
     const createdPost1 = postsService.create(post);
     const createdPost2 = postsService.create({ text: 'Another post' });
@@ -23,7 +27,7 @@ describe('PostsService', () => {
       expect.objectContaining({
         id: '2',
         text: post.text,
-        date: '2020-01-01T00:00:00.000Z',
+        date: fixedDate,
       }),
     );
 
@@ -31,14 +35,12 @@ describe('PostsService', () => {
       expect.objectContaining({
         id: '3',
         text: 'Another post',
-        date: '2020-01-01T00:00:00.000Z',
+        date: fixedDate,
       }),
     );
 
     expect(postsService.find('2')).toEqual(createdPost1);
     expect(postsService.find('3')).toEqual(createdPost2);
-
-    jest.useRealTimers();
   });
 
   it('should find a post', () => {
