@@ -13,7 +13,27 @@ describe('PostsService', () => {
   });
 
   it('should add a new post', () => {
-    // реализуйте тест-кейс
+    const createdPost1 = postsService.create(post);
+    const createdPost2 = postsService.create({ text: 'Another post' });
+
+    expect(createdPost1).toEqual(
+      expect.objectContaining({
+        id: '2',
+        text: post.text,
+        date: expect.any(String),
+      }),
+    );
+
+    expect(createdPost2).toEqual(
+      expect.objectContaining({
+        id: '3',
+        text: 'Another post',
+        date: expect.any(String),
+      }),
+    );
+
+    expect(postsService.find('2')).toEqual(createdPost1);
+    expect(postsService.find('3')).toEqual(createdPost2);
   });
 
   it('should find a post', () => {
