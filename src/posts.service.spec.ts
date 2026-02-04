@@ -17,6 +17,16 @@ describe('PostsService', () => {
   });
 
   it('should find a post', () => {
-    // реализуйте тест-кейс
+    const preExistingPostId = '1';
+
+    const foundPost = postsService.find(preExistingPostId);
+
+    expect(foundPost).toEqual(
+      expect.objectContaining({
+        id: preExistingPostId,
+        text: 'Some pre-existing post',
+        date: expect.any(String),
+      }),
+    );
   });
 });
