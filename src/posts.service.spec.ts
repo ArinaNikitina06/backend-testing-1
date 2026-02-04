@@ -13,6 +13,9 @@ describe('PostsService', () => {
   });
 
   it('should add a new post', () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date('2020-01-01T00:00:00.000Z'));
+
     const createdPost1 = postsService.create(post);
     const createdPost2 = postsService.create({ text: 'Another post' });
 
@@ -20,7 +23,7 @@ describe('PostsService', () => {
       expect.objectContaining({
         id: '2',
         text: post.text,
-        date: expect.any(String),
+        date: '2020-01-01T00:00:00.000Z',
       }),
     );
 
@@ -28,12 +31,14 @@ describe('PostsService', () => {
       expect.objectContaining({
         id: '3',
         text: 'Another post',
-        date: expect.any(String),
+        date: '2020-01-01T00:00:00.000Z',
       }),
     );
 
     expect(postsService.find('2')).toEqual(createdPost1);
     expect(postsService.find('3')).toEqual(createdPost2);
+
+    jest.useRealTimers();
   });
 
   it('should find a post', () => {
@@ -48,5 +53,7 @@ describe('PostsService', () => {
         date: expect.any(String),
       }),
     );
+
+    expect(postsService.find('999')).toBeUndefined();
   });
 });
